@@ -1,0 +1,38 @@
+---
+# Default variables for brain-x.host_inspector role
+
+# List of applications to check
+apps_to_check:
+  - curl
+  - docker
+  - nmap
+  - nvidia-smi
+  - nvidia-ctk
+  - ollama
+  - ufw
+
+# Timeout for checking if Ollama service is running
+ollama_check_timeout: 10
+
+# Timeout for scanning other hosts
+scan_timeout: 60
+
+# Ports to scan with nmap
+scan_ports: '22,80,443'
+
+# List of apis to test
+apis_to_test:
+  - name: "ollama"
+    url: "http://127.0.0.1"
+    port: 11434
+    endpoint: "/"
+    expected_result: "Ollama is running"
+  - name: "prometheus"
+    port: 9090
+    endpoint: "/-/healthy"
+  - name: "grafana"
+    port: 3000
+    endpoint: "/api/health"
+
+# Timeout for api tests
+api_test_timeout: 10
