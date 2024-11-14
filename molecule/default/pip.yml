@@ -11,4 +11,6 @@
 
   roles:
     - role: geerlingguy.pip
+      vars:
+        pip_packages: requests
     - role: geerlingguy.ansible
