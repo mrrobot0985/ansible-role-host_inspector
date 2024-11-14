@@ -22,8 +22,7 @@
     timeout: "{{ scan_timeout }}"
     ports: "{{ scan_ports }}"
   register: scan_results
-  when: 
-    - app_info.host_info.apps_status.nmap.installed | default(false)
+  when: app_info.host_info.apps_status.nmap.installed | default(false)
 
 - name: Check networking information
   check_networking:
@@ -48,12 +47,12 @@
 - name: Combine all info
   set_fact:
     inspector_info: >-
-      {{ host_status 
-      | combine_info(app_info, api_info, scan_results, 
-                      network_info, internet_info, 
-                      docker_info, gpu_info, check_security) 
+      {{ host_status
+      | combine_info(app_info, api_info, scan_results,
+                      network_info, internet_info,
+                      docker_info, gpu_info, check_security)
       | strip_metadata }}
-      
+
 - name: Show all info
   debug:
     msg: "{{ inspector_info }}"
