@@ -1,0 +1,32 @@
+---
+galaxy_info:
+  author: Mister Robot
+  namespace: brain-x
+  role_name: host_inspector
+  description: >-
+    Comprehensive host system assessment, checking apps, system info, network, security, Docker, GPU, and APIs.
+
+  company: BrainXio
+
+  license: The-Unlicense
+
+  min_ansible_version: "2.1"
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+
+  galaxy_tags:
+    - system
+    - audit
+    - security
+    - networking
+    - docker
+    - gpu
+    - api
+
+dependencies: []
