@@ -19,7 +19,7 @@ galaxy_info:
 
   license: The-Unlicense
 
-  min_ansible_version: 2.1
+  min_ansible_version: "2.1"
 
   platforms:
     - name: Ubuntu
