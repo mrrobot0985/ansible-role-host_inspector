@@ -1,7 +1,6 @@
 ---
 galaxy_info:
   author: Mister Robot
-  namespace: brain-x
   role_name: host_inspector
   description: Comprehensive host system assessment, checking apps, system info, network, security, Docker, GPU, and APIs.
 
