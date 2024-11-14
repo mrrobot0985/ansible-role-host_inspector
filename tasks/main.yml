@@ -1,0 +1,54 @@
+---
+# tasks file for brain-x.host_inspector
+
+- name: Check Host Info
+  check_host:
+  register: host_status
+
+- name: Check for installed cli applications
+  check_app:
+    apps: "{{ apps_to_check }}"
+  register: app_info
+
+- name: Check Various APIs
+  check_api:
+    apis: "{{ apis_to_test }}"
+    timeout: "{{ api_test_timeout }}"
+  register: api_info
+
+- name: Scan other hosts in the inventory
+  scan_target:
+    targets: "{{ groups['all'] | difference([inventory_hostname]) }}"
+    timeout: "{{ scan_timeout }}"
+    ports: "{{ scan_ports }}"
+  register: scan_results
+  when: app_info.host_info.apps_status.nmap.installed | default(false)
+
+- name: Check networking information
+  check_networking:
+  register: network_info
+
+- name: Check internet connectivity
+  check_internet:
+  register: internet_info
+
+- name: Check Docker configuration
+  docker_check:
+  register: docker_info
+
+- name: Check GPU information
+  gpu_check:
+  register: gpu_info
+
+- name: Check security status of the system
+  check_security:
+  register: check_security
+
+- name: Combine all info
+  set_fact:
+    inspector_info: "{{ host_status | combine_info(app_info, api_info, scan_results, network_info, internet_info, docker_info, gpu_info, check_security) | strip_metadata }}"
+
+- name: Show all info
+  debug:
+    msg: "{{ inspector_info }}"
+  when: debug is defined and debug
