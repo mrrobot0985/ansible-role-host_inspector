@@ -2,4 +2,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - brain-x.network_scan
+    - mrrobot0985.host_inspector
