@@ -1,5 +1,10 @@
 ---
 # tasks file for brain-x.host_inspector
+- name: Ensure curl is installed
+  ansible.builtin.apt:
+    name: curl
+    state: present
+    update_cache: yes
 
 - name: Check Host Info
   check_host:

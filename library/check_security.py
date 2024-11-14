@@ -14,8 +14,7 @@ def run_module():
     results = {
         "os": get_os_info(),
         "ssh_config": check_ssh_config(),
-        "firewall_status": check_firewall_status(),
-        "patches": check_patches()
+        "firewall_status": check_firewall_status()
     }
 
     module.exit_json(changed=False, security_status=results)
@@ -86,27 +85,6 @@ def parse_ufw_rules(ufw_status):
             }
             rules.append(rule)
     return rules
-
-def check_patches():
-    patches = {}
-    if platform.system() == "Linux":
-        if os.path.exists('/usr/bin/yum'):
-            # For RedHat/CentOS
-            try:
-                output = subprocess.check_output(['yum', 'check-update'], stderr=subprocess.STDOUT).decode('utf-8')
-                patches['updates_available'] = "updates_available" in output
-                patches['yum_output'] = output
-            except subprocess.CalledProcessError:
-                patches['error'] = "Failed to run yum check-update"
-        elif os.path.exists('/usr/bin/apt-get'):
-            # For Debian/Ubuntu
-            try:
-                output = subprocess.check_output(['apt-get', 'upgrade', '-s'], stderr=subprocess.STDOUT).decode('utf-8')
-                patches['updates_available'] = "The following packages have been kept back" in output or "Inst" in output
-                patches['apt_output'] = output
-            except subprocess.CalledProcessError:
-                patches['error'] = "Failed to run apt-get upgrade -s"
-    return patches
 
 if __name__ == '__main__':
     run_module()

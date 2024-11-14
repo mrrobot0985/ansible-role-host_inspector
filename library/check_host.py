@@ -22,17 +22,15 @@ def run_module():
         "cpu_count": get_cpu_count(),
         "python_version": platform.python_version(),
         "memory_info": get_memory_info(),
-        "swap_info": get_swap_info()
+        "swap_info": get_swap_info(),
+        "patches": get_patch_info()  # Fetching patch information with statistics
     }
 
     module.exit_json(changed=False, host_info=result)
 
 def check_reboot_required():
     # Check for reboot requirement on Debian-based systems
-    if os.path.exists('/var/run/reboot-required'):
-        return True
-    # Add checks for other OS's here if necessary
-    return False
+    return os.path.exists('/var/run/reboot-required')
 
 def get_system_locale():
     try:
@@ -87,7 +85,6 @@ def get_cpu_count():
 
 def get_memory_info():
     try:
-        # Using /proc/meminfo to get memory information
         with open('/proc/meminfo', 'r') as f:
             meminfo = f.readlines()
         
@@ -96,7 +93,7 @@ def get_memory_info():
         mem_available = int(meminfo[2].split()[1])  # MemAvailable
         
         return {
-            "total": mem_total * 1024,  # Converting to bytes
+            "total": mem_total * 1024,
             "free": mem_free * 1024,
             "available": mem_available * 1024
         }
@@ -105,7 +102,6 @@ def get_memory_info():
 
 def get_swap_info():
     try:
-        # Using /proc/meminfo to get swap information
         with open('/proc/meminfo', 'r') as f:
             meminfo = f.readlines()
         
@@ -115,13 +111,50 @@ def get_swap_info():
             swap_total = int(swap_info[0].split()[1])
             swap_free = int(swap_info[1].split()[1])
             return {
-                "total": swap_total * 1024,  # Converting to bytes
+                "total": swap_total * 1024,
                 "free": swap_free * 1024
             }
         else:
             return "No swap information available"
     except (FileNotFoundError, IndexError):
         return "Unable to get swap info"
+
+import re
+
+def get_patch_info():
+    try:
+        apt_output = subprocess.check_output(['apt-get', 'upgrade', '--simulate'], stderr=subprocess.STDOUT).decode('utf-8')
+        
+        apt_info = {
+            "apt_output": {
+                "upgraded": 0,
+                "newly_installed": 0,
+                "to_remove": 0,
+                "not_upgraded": 0,
+                "upgradable": 0
+            },
+            "updates_available": False
+        }
+
+        # Extract the summary stats
+        summary_match = re.search(r'(\d+) upgraded, (\d+) newly installed, (\d+) to remove and (\d+) not upgraded', apt_output)
+        if summary_match:
+            apt_info['apt_output']['upgraded'] = int(summary_match.group(1))
+            apt_info['apt_output']['newly_installed'] = int(summary_match.group(2))
+            apt_info['apt_output']['to_remove'] = int(summary_match.group(3))
+            apt_info['apt_output']['not_upgraded'] = int(summary_match.group(4))
+
+            # 'upgradable' might be considered as anything that could be updated or installed
+            apt_info['apt_output']['upgradable'] = sum(int(summary_match.group(i)) for i in[1, 2, 4])  # sum of upgraded, newly_installed, and not_upgraded
+
+            # If any of the above are greater than 0, we consider updates available
+            apt_info['updates_available'] = any(apt_info['apt_output'].values())
+
+        return {"patches": apt_info}
+    except subprocess.CalledProcessError as e:
+        return {"patches": {"error": str(e)}}
+    except Exception as e:
+        return {"patches": {"error": f"An unexpected error occurred: {str(e)}"}}
 
 if __name__ == '__main__':
     run_module()
