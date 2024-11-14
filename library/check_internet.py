@@ -4,7 +4,6 @@ from ansible.module_utils.basic import AnsibleModule
 import subprocess
 import os
 import json
-import requests
 
 def run_module():
     module = AnsibleModule(
@@ -47,11 +46,7 @@ def check_package_manager_proxy():
     return proxy_settings
 
 def check_environment_proxy():
-    env_proxy = {}
-    for env_var in ['http_proxy', 'https_proxy', 'ftp_proxy']:
-        if env_var in os.environ:
-            env_proxy[env_var] = os.environ[env_var]
-    return env_proxy
+    return {key: val for key, val in os.environ.items() if key.lower() in ['http_proxy', 'https_proxy', 'ftp_proxy']}
 
 def check_firefox_proxy():
     firefox_profile = os.path.expanduser("~/.mozilla/firefox/")
@@ -92,11 +87,16 @@ def check_brave_proxy():
 
 def get_wan_address():
     try:
-        response = requests.get('https://api.ipify.org?format=json', timeout=5)
-        response.raise_for_status()
-        return response.json()['ip']
-    except requests.RequestException:
-        return {"error": "Failed to retrieve WAN address"}
+        # Using curl to fetch WAN IP address
+        cmd = ["curl", "-s", "--max-time", "5", "https://api.ipify.org?format=json"]
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        return json.loads(result.stdout)['ip']
+    except subprocess.CalledProcessError as e:
+        return {"error": f"Failed to retrieve WAN address: {e.stderr}"}
+    except json.JSONDecodeError:
+        return {"error": "Failed to decode WAN address response"}
+    except Exception as e:
+        return {"error": f"An error occurred: {str(e)}"}
 
 if __name__ == '__main__':
     run_module()

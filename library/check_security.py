@@ -2,7 +2,6 @@
 
 from ansible.module_utils.basic import AnsibleModule
 import subprocess
-import re
 import os
 import platform
 

@@ -2,8 +2,6 @@
 
 from ansible.module_utils.basic import AnsibleModule
 import subprocess
-import json
-import netifaces
 import platform
 
 def run_module():
@@ -24,35 +22,28 @@ def run_module():
 
 def get_interface_info():
     interfaces = {}
-    for interface in netifaces.interfaces():
-        if_info = netifaces.ifaddresses(interface)
-        interfaces[interface] = {
-            "ipv4": if_info.get(netifaces.AF_INET, [{"addr": "N/A"}])[0].get('addr', "N/A"),
-            "ipv6": if_info.get(netifaces.AF_INET6, [{"addr": "N/A"}])[0].get('addr', "N/A") if netifaces.AF_INET6 in if_info else "N/A",
-            "mac": if_info.get(netifaces.AF_LINK, [{"addr": "N/A"}])[0].get('addr', "N/A")
-        }
-        # Get detailed interface info using 'ip' command for Linux systems
-        if platform.system() == "Linux":
-            try:
-                ip_output = subprocess.check_output(['ip', 'addr', 'show', interface]).decode('utf-8')
-                interfaces[interface].update(parse_ip_output(ip_output))
-            except subprocess.CalledProcessError:
-                # If 'ip' command fails, continue with basic info
-                pass
+    if platform.system() == "Linux":
+        # Use 'ip' command to get interface information
+        try:
+            ip_output = subprocess.check_output(['ip', 'addr']).decode('utf-8')
+            for interface in ip_output.split(' '):
+                if interface.startswith(' '):  # Interfaces are indented
+                    interface_name = interface.split(':')[1].strip()
+                    interfaces[interface_name] = parse_interface_output(interface)
+        except subprocess.CalledProcessError:
+            return {"error": "Failed to retrieve interface information"}
     return interfaces
 
-def parse_ip_output(ip_output):
+def parse_interface_output(interface_output):
     interface_info = {}
-    lines = ip_output.split('\n')
+    lines = interface_output.split('\n')
     for line in lines:
         if 'mtu' in line:
             interface_info['mtu'] = line.split('mtu')[1].split()[0].strip()
         elif 'inet ' in line:
-            interface_info['ipv4_cidr'] = line.split('inet ')[1].split()[0].strip()
+            interface_info['ipv4'] = line.split('inet ')[1].split()[0].strip()
         elif 'inet6 ' in line:
-            interface_info['ipv6_cidr'] = line.split('inet6 ')[1].split()[0].strip()
-        elif 'broadcast' in line:
-            interface_info['broadcast'] = line.split('brd')[1].split()[0].strip()
+            interface_info['ipv6'] = line.split('inet6 ')[1].split()[0].strip()
         elif 'link/ether' in line:
             interface_info['mac'] = line.split('link/ether')[1].split()[0].strip()
     return interface_info

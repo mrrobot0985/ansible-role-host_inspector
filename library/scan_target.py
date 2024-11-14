@@ -2,7 +2,6 @@
 
 from ansible.module_utils.basic import AnsibleModule
 import subprocess
-import json
 import time
 import socket
 

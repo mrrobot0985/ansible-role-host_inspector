@@ -5,7 +5,6 @@ import os
 import platform
 import locale
 import subprocess
-import json
 
 def run_module():
     module = AnsibleModule(
