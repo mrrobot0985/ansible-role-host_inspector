@@ -46,7 +46,7 @@
 
 - name: Combine all info
   ansible.builtin.set_fact:
-    inspector_info: >-
+    host_inspector: >-
       {{ host_status
       | combine_info(app_info, api_info, scan_results,
                       network_info, internet_info,
@@ -55,5 +55,5 @@
 
 - name: Show all info
   ansible.builtin.debug:
-    var: inspector_info
+    var: host_inspector
   when: debug is defined and debug
