@@ -1,0 +1,48 @@
+---
+galaxy_info:
+  author: Mister Robot
+  description: |-
+    The **Host Inspector** role is designed to perform a comprehensive assessment of a host system. It checks for:
+
+    - **Installed Applications**: Verifies the presence and version of critical CLI tools.
+    - **System Information**: Gathers OS details, CPU count, memory usage, and disk space.
+    - **Network Connectivity**: Evaluates network settings and internet connectivity status.
+    - **Security**: Examines firewall settings, SSH configuration, and available patches.
+    - **Docker and GPU**: Checks Docker configuration and NVIDIA GPU details, if applicable.
+    - **Ollama Service**: Ensures the Ollama service is running, if installed.
+
+    This role combines all the gathered information into a structured output for easy analysis, making it an essential tool for system administrators to audit, troubleshoot, and maintain system health.
+
+  company: BrainXio
+
+  license: The-Unlicense
+
+  min_ansible_version: 2.1
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: CentOS
+      versions:
+        - all
+    - name: macOS
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+    - name: Fedora
+      versions:
+        - all
+
+  galaxy_tags:
+    - system
+    - audit
+    - security
+    - networking
+    - docker
+    - gpu
+    - api
+
+dependencies: []
