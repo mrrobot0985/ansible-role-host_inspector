@@ -45,7 +45,7 @@
   register: check_security
 
 - name: Combine all info
-  set_fact:
+  ansible.builtin.set_fact:
     inspector_info: >-
       {{ host_status
       | combine_info(app_info, api_info, scan_results,
@@ -54,6 +54,6 @@
       | strip_metadata }}
 
 - name: Show all info
-  debug:
-    msg: "{{ inspector_info }}"
+  ansible.builtin.debug:
+    var: inspector_info
   when: debug is defined and debug

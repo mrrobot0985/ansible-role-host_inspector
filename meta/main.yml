@@ -25,16 +25,7 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - all
-    - name: CentOS
-      versions:
-        - all
-    - name: macOS
-      versions:
-        - all
     - name: Debian
-      versions:
-        - all
-    - name: Fedora
       versions:
         - all
 
