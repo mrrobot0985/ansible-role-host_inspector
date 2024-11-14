@@ -41,20 +41,20 @@ Role Variables
 
 - **apis_to_test**: List of APIs to test:
 
-  ```yaml
-  apis_to_test:
-    - name: "ollama"
-      url: "http://127.0.0.1"
-      port: 11434
-      endpoint: "/"
-      expected_result: "Ollama is running"
-    - name: "prometheus"
-      port: 9090
-      endpoint: "/-/healthy"
-    - name: "grafana"
-      port: 3000
-      endpoint: "/api/health"
-  ```
+```yaml
+apis_to_test:
+  - name: "ollama"
+    url: "http://127.0.0.1"
+    port: 11434
+    endpoint: "/"
+    expected_result: "Ollama is running"
+  - name: "prometheus"
+    port: 9090
+    endpoint: "/-/healthy"
+  - name: "grafana"
+    port: 3000
+    endpoint: "/api/health"
+```
 
 - **api_test_timeout**: Timeout for API tests (default: 10 seconds).
 
@@ -73,7 +73,7 @@ Usage example:
 ```yaml
 - hosts: all
   roles:
-    - role: host_inspector
+    - role: mrrobot0985.host_inspector
       vars:
         debug: true
         apps_to_check:
@@ -88,7 +88,7 @@ Usage example:
   tasks:
     - name: Display host inspection results
       debug:
-        var: inspector_info
+        var: host_inspector
       when: debug is defined and debug
 ```
 
