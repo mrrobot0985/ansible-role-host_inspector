@@ -1,17 +1,20 @@
 ---
 galaxy_info:
   author: Mister Robot
+  namespace: brain-x
+  role_name: host_inspector  
   description: |-
-    The **Host Inspector** role is designed to perform a comprehensive assessment of a host system. It checks for:
+    The **Host Inspector** role performs a comprehensive assessment of host systems,
+    checking for:
+    - **Installed Applications**: Verifies presence and version of CLI tools.
+    - **System Information**: Gathers OS details, CPU count, memory, and disk space.
+    - **Network Connectivity**: Evaluates network settings and connectivity status.
+    - **Security**: Examines firewall settings, SSH config, and available patches.
+    - **Docker and GPU**: Checks Docker and NVIDIA GPU details.
+    - **API Services**: Verifies operational status of critical APIs.
 
-    - **Installed Applications**: Verifies the presence and version of critical CLI tools.
-    - **System Information**: Gathers OS details, CPU count, memory usage, and disk space.
-    - **Network Connectivity**: Evaluates network settings and internet connectivity status.
-    - **Security**: Examines firewall settings, SSH configuration, and available patches.
-    - **Docker and GPU**: Checks Docker configuration and NVIDIA GPU details, if applicable.
-    - **Ollama Service**: Ensures the Ollama service is running, if installed.
-
-    This role combines all the gathered information into a structured output for easy analysis, making it an essential tool for system administrators to audit, troubleshoot, and maintain system health.
+    This role provides structured output for system health analysis, aiding in
+    system administration tasks like auditing, troubleshooting, and maintenance.
 
   company: BrainXio
 
