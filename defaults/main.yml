@@ -1,9 +1,7 @@
 ---
 # defaults file for host_inspector
 
-module_library_path: "{{ playbook_dir }}/.test"
-module_tasks_path: "{{ playbook_dir }}/.test"
-module_log_path: "{{ playbook_dir }}/logs"
+module_log_path: "logs"
 # List of applications to check
 apps_to_check:
   - curl

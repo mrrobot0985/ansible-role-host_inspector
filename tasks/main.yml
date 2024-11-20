@@ -8,7 +8,7 @@
       register: results
 
     - name: Update inspection report
-      set_fact:
+      ansible.builtin.set_fact:
         inspection_report: "{{ results }}"
         results: {}
 
@@ -19,7 +19,7 @@
       register: results
 
     - name: Update inspection report
-      set_fact:
+      ansible.builtin.set_fact:
         inspection_report: "{{ inspection_report | merge_dicts(results) }}"
         results: {}
 
@@ -30,7 +30,7 @@
       register: results
 
     - name: Update inspection report
-      set_fact:
+      ansible.builtin.set_fact:
         inspection_report: "{{ inspection_report | merge_dicts(results) }}"
         results: {}
 
@@ -41,7 +41,7 @@
       register: results
 
     - name: Update inspection report
-      set_fact:
+      ansible.builtin.set_fact:
         inspection_report: "{{ inspection_report | merge_dicts(results) }}"
         results: {}
 
@@ -52,7 +52,7 @@
       register: results
 
     - name: Update inspection report
-      set_fact:
+      ansible.builtin.set_fact:
         inspection_report: "{{ inspection_report | merge_dicts(results) }}"
         results: {}
 
@@ -63,7 +63,7 @@
       register: results
 
     - name: Update inspection report
-      set_fact:
+      ansible.builtin.set_fact:
         inspection_report: "{{ inspection_report | merge_dicts(results) }}"
         results: {}
 
@@ -78,7 +78,7 @@
       register: results
 
     - name: Update inspection report
-      set_fact:
+      ansible.builtin.set_fact:
         inspection_report: "{{ inspection_report | merge_dicts(results) }}"
         results: {}
 
@@ -89,7 +89,7 @@
       register: results
 
     - name: Update inspection report
-      set_fact:
+      ansible.builtin.set_fact:
         inspection_report: "{{ inspection_report | merge_dicts(results) }}"
         results: {}
 
@@ -100,7 +100,7 @@
       register: results
 
     - name: Update inspection report
-      set_fact:
+      ansible.builtin.set_fact:
         inspection_report: "{{ inspection_report | merge_dicts(results) }}"
         results: {}
 
@@ -113,7 +113,7 @@
       register: results
 
     - name: Update inspection report
-      set_fact:
+      ansible.builtin.set_fact:
         inspection_report: "{{ inspection_report | merge_dicts(results) }}"
         results: {}
 
@@ -124,37 +124,37 @@
       register: results
 
     - name: Update inspection report
-      set_fact:
+      ansible.builtin.set_fact:
         inspection_report: "{{ inspection_report | merge_dicts(results) }}"
         results: {}
 
 # Split Inspection report into separate objects
 - name: Separate action, data, speech facts
-  set_fact:
+  ansible.builtin.set_fact:
     recommended_actions: "{{ inspection_report.ansible_facts.actions }}"
     system_data: "{{ inspection_report.ansible_facts.data }}"
     speech: "{{ inspection_report.ansible_facts.speech }}"
 
 - name: Display Recommended Actions
-  debug:
+  ansible.builtin.debug:
     var: recommended_actions
   when: show_actions | default(false) | bool
 
 - name: Display system data
-  debug:
+  ansible.builtin.debug:
     var: system_data
   when: show_data | default(false) | bool
 
 - name: Display Speech
-  debug:
+  ansible.builtin.debug:
     var: speech
   when: show_speech | default(false) | bool
 
 - name: Extract 'text' values from speech data
-  set_fact:
+  ansible.builtin.set_fact:
     speech_texts: "{{ speech | extract_key('text') }}"
 
 - name: Display speech texts
-  debug:
+  ansible.builtin.debug:
     var: speech_texts
   when: show_speech_texts | default(false) | bool
