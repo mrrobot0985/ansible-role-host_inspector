@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Mister Robot
-  namespace: brainxio
+  namespace: mrrobot0985
   role_name: host_inspector
   description: Comprehensive host system assessment, checking apps, system info, network, security, Docker, GPU, and APIs.
 
