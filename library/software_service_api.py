@@ -52,7 +52,7 @@ def _set_speech(id=0, speaker_id=0, message=None, remediation_tasks=None):
         actions_text = "Recommended actions are: "
         actions_tags = set()
         for task in remediation_tasks:
-            actions_text += f"{task['action']} for {task['tags'][1]} due to {task['reason']}. "
+            actions_text += f"{task['description']} for {task['tags'][1]} due to {task['reason']}. "
             actions_tags.update(task['tags'])
         
         objects.append({

@@ -1,0 +1,6 @@
+{
+  "System Data": {
+    "{{ ansible_hostname }}": {{ report_data.ansible_facts.data.host | to_nice_json(indent=2) }}
+  },
+  "Recommended Actions": {{ report_data.ansible_facts.actions | to_nice_json(indent=2)  }}
+}

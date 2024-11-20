@@ -2,6 +2,9 @@
 # defaults file for host_inspector
 
 module_log_path: "logs"
+module_report_path: "{{ playbook_dir }}/.report"
+module_speech_path: "{{ playbook_dir }}/.speech"
+
 # List of applications to check
 apps_to_check:
   - curl

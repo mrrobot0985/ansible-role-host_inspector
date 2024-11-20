@@ -1,7 +1,23 @@
 ---
-- name: Set safe inventory hostname
-  ansible.builtin.set_fact:
-    safe_inventory_hostname: "{{ inventory_hostname | replace('.', '_') }}"
+
+- name: Preparations
+  block:
+    - name: Set safe inventory hostname
+      ansible.builtin.set_fact:
+        safe_inventory_hostname: "{{ inventory_hostname | replace('.', '_') }}"
+
+    - name: Ensure required directories exist
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ lookup('env','USER') }}"
+        group: "{{ lookup('env','USER') }}"
+      loop:
+        - "{{ module_report_path }}"
+        - "{{ module_log_path }}"
+        - "{{ module_speech_path }}"
+      delegate_to: localhost
+      run_once: true
 
 - name: Gather Hardware Information
   block:
@@ -132,33 +148,60 @@
         inspection_report: "{{ inspection_report | merge_dicts(results) }}"
         results: {}
 
-# Split Inspection report into separate objects
-- name: Separate action, data, speech facts
-  ansible.builtin.set_fact:
-    recommended_actions: "{{ inspection_report.ansible_facts.actions }}"
-    system_data: "{{ inspection_report.ansible_facts.data }}"
-    speech: "{{ inspection_report.ansible_facts.speech }}"
+- name: Finalize data
+  block:
+    # - name: Ensure remote user has permissions
+    #   ansible.builtin.file:
+    #     path: "{{ module_log_path }}/{{ safe_inventory_hostname }}_inspection.log"
+    #     mode: '0644'
 
-- name: Display Recommended Actions
-  ansible.builtin.debug:
-    var: recommended_actions
-  when: show_actions | default(false) | bool
+    - name: Copy logs to local machine
+      ansible.builtin.fetch:
+        src: "{{ module_log_path }}/{{ safe_inventory_hostname }}_inspection.log"
+        dest: "{{ module_log_path }}/{{ safe_inventory_hostname }}_inspection.log"
+        flat: yes
 
-- name: Display system data
-  ansible.builtin.debug:
-    var: system_data
-  when: show_data | default(false) | bool
+    # Split Inspection report into separate objects
+    - name: Separate action, data, speech facts
+      ansible.builtin.set_fact:
+        recommended_actions: "{{ inspection_report.ansible_facts.actions }}"
+        system_data: "{{ inspection_report.ansible_facts.data }}"
+        speech: "{{ inspection_report.ansible_facts.speech }}"
 
-- name: Display Speech
-  ansible.builtin.debug:
-    var: speech
-  when: show_speech | default(false) | bool
+    - name: Generate report locally
+      template:
+        src: "report_template.{{ item }}.j2"
+        dest: "{{ module_report_path }}/system_report_{{ inventory_hostname }}.{{ item }}"
+        owner: "{{ lookup('env','USER') }}"
+        group: "{{ lookup('env','USER') }}"
+      delegate_to: localhost
+      vars:
+        report_data: "{{ lookup('obfuscate', inspection_report) }}"
+      with_items:
+        - html
+        - json
 
-- name: Extract 'text' values from speech data
-  ansible.builtin.set_fact:
-    speech_texts: "{{ speech | extract_key('text') }}"
+    # - name: Display Recommended Actions
+    #   ansible.builtin.debug:
+    #     var: recommended_actions
+    #   when: show_actions | default(false) | bool
 
-- name: Display speech texts
-  ansible.builtin.debug:
-    var: speech_texts
-  when: show_speech_texts | default(false) | bool
+    # - name: Display system data
+    #   ansible.builtin.debug:
+    #     var: system_data
+    #   when: show_data | default(false) | bool
+
+    # - name: Display Speech
+    #   ansible.builtin.debug:
+    #     var: speech
+    #   when: show_speech | default(false) | bool
+
+    # - name: Extract 'text' values from speech data
+    #   ansible.builtin.set_fact:
+    #     speech_texts: "{{ speech | extract_key('text') }}"
+
+    # - name: Display speech texts
+    #   ansible.builtin.debug:
+    #     var: speech_texts
+    #   when: show_speech_texts | default(false) | bool
+

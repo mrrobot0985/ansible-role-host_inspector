@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Inspection Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h1, h2, h3 { margin: 20px 0 10px; }
+        ul { list-style-type: none; padding-left: 0; }
+        li { margin-bottom: 10px; }
+        .action-header { color: #0056b3; font-weight: bold; }
+        .action-description { color: #333; }
+        .action-reason { color: #6c757d; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<h1>System Data</h1>
+
+<h2>Information</h2>
+{% for key, value in report_data.ansible_facts.data.host.items() %}
+    <h3>{{ key | title }}</h3>
+    <ul>
+        {% for subkey, subvalue in value.items() %}
+            <li>
+                <strong>{{ subkey | title }}:</strong>
+                {{ subvalue | to_nice_json }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endfor %}
+
+<h2>Recommended Actions</h2>
+<ul>
+    {% for action in report_data.ansible_facts.actions %}
+        <li>
+            <h3>{{ action.action | title }}</h3>
+            <p class="action-description">{{ action.description }}</p>
+            <p class="action-reason"><em>Reason:</em> {{ action.reason }}</p>
+            <p><strong>Tags:</strong> {{ action.tags | join(', ') }}</p>
+        </li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>
