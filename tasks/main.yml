@@ -2,7 +2,7 @@
 - name: Gather Hardware Information
   block:
   - name: Assess system information
-    harware_global_info:
+    hardware_global_info:
       id_offset: 1
       log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
@@ -13,7 +13,7 @@
       results: {}
 
   - name: Detect AMD GPU
-    harware_gpu_amd:
+    hardware_gpu_amd:
       id_offset: "{{inspection_report.ansible_facts.speech.next_id}}"
       log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
@@ -24,7 +24,7 @@
       results: {}
 
   - name: Detect Intel GPU
-    harware_gpu_intel:
+    hardware_gpu_intel:
       id_offset: "{{inspection_report.ansible_facts.speech.next_id}}"
       log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
@@ -35,7 +35,7 @@
       results: {}
 
   - name: Detect Nvidia GPU
-    harware_gpu_nvidia:
+    hardware_gpu_nvidia:
         id_offset: "{{inspection_report.ansible_facts.speech.next_id}}"
         log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
@@ -46,7 +46,7 @@
       results: {}
 
   - name: Detect Nvidia toolkits
-    harware_gpu_toolkit_nvidia:
+    hardware_gpu_toolkit_nvidia:
         id_offset: "{{inspection_report.ansible_facts.speech.next_id}}"
         log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
@@ -57,7 +57,7 @@
       results: {}
 
   - name: Detect Google Coral
-    harware_tpu_coral:
+    hardware_tpu_coral:
         id_offset: "{{inspection_report.ansible_facts.speech.next_id}}"
         log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
