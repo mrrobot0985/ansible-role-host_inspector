@@ -2,69 +2,69 @@
 - name: Gather Hardware Information
   block:
   - name: Assess system information
-    hardware.global_info:
+    harware_global_info:
       id_offset: 1
-      log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+      log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
 
   - name: Update inspection report
     set_fact:
-      inspection_report: "{{ results }}"
+      inspection_report: "{{results}}"
       results: {}
 
   - name: Detect AMD GPU
-    hardware.gpu_amd:
-      id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-      log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+    harware_gpu_amd:
+      id_offset: "{{inspection_report.ansible_facts.speech.next_id}}"
+      log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
 
   - name: Update inspection report
     set_fact:
-      inspection_report: "{{ inspection_report | merge_dicts(results) }}"
+      inspection_report: "{{inspection_report | merge_dicts(results)}}"
       results: {}
 
   - name: Detect Intel GPU
-    hardware.gpu_intel:
-      id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-      log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+    harware_gpu_intel:
+      id_offset: "{{inspection_report.ansible_facts.speech.next_id}}"
+      log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
 
   - name: Update inspection report
     set_fact:
-      inspection_report: "{{ inspection_report | merge_dicts(results) }}"
+      inspection_report: "{{inspection_report | merge_dicts(results)}}"
       results: {}
 
   - name: Detect Nvidia GPU
-    hardware.gpu_nvidia:
-        id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-        log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+    harware_gpu_nvidia:
+        id_offset: "{{inspection_report.ansible_facts.speech.next_id}}"
+        log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
 
   - name: Update inspection report
     set_fact:
-      inspection_report: "{{ inspection_report | merge_dicts(results) }}"
+      inspection_report: "{{inspection_report | merge_dicts(results)}}"
       results: {}
 
   - name: Detect Nvidia toolkits
-    hardware.gpu_toolkit_nvidia:
-        id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-        log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+    harware_gpu_toolkit_nvidia:
+        id_offset: "{{inspection_report.ansible_facts.speech.next_id}}"
+        log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
 
   - name: Update inspection report
     set_fact:
-      inspection_report: "{{ inspection_report | merge_dicts(results) }}"
+      inspection_report: "{{inspection_report | merge_dicts(results)}}"
       results: {}
 
   - name: Detect Google Coral
-    hardware.tpu_coral:
-        id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-        log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+    harware_tpu_coral:
+        id_offset: "{{inspection_report.ansible_facts.speech.next_id}}"
+        log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
 
   - name: Update inspection report
     set_fact:
-      inspection_report: "{{ inspection_report | merge_dicts(results) }}"
+      inspection_report: "{{inspection_report | merge_dicts(results)}}"
       results: {}
 
 # Gather OS and App information
@@ -72,69 +72,69 @@
 - name: Gather system information
   block:
   - name: Detect Apps
-    software.apps:
-      apps: "{{ apps_to_check }}"
-      id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-      log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+    software_apps:
+      apps: "{{apps_to_check}}"
+      id_offset: "{{inspection_report.ansible_facts.speech.next_id}}"
+      log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
 
   - name: Update inspection report
     set_fact:
-      inspection_report: "{{ inspection_report | merge_dicts(results) }}"
+      inspection_report: "{{inspection_report | merge_dicts(results)}}"
       results: {}
 
   - name: Detect docker
-    software.docker:
-      id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-      log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+    software_docker:
+      id_offset: "{{inspection_report.ansible_facts.speech.next_id}}"
+      log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
 
   - name: Update inspection report
     set_fact:
-      inspection_report: "{{ inspection_report | merge_dicts(results) }}"
+      inspection_report: "{{inspection_report | merge_dicts(results)}}"
       results: {}
 
   - name: Detect internet
-    software.internet:
-      id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-      log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+    software_internet:
+      id_offset: "{{inspection_report.ansible_facts.speech.next_id}}"
+      log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
 
   - name: Update inspection report
     set_fact:
-      inspection_report: "{{ inspection_report | merge_dicts(results) }}"
+      inspection_report: "{{inspection_report | merge_dicts(results)}}"
       results: {}
 
   - name: Detect service APIs
-    software.service_api:
-      apis: "{{ apis_to_test }}"
-      timeout: "{{ api_test_timeout }}"
-      id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-      log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+    software_service_api:
+      apis: "{{apis_to_test}}"
+      timeout: "{{api_test_timeout}}"
+      id_offset: "{{inspection_report.ansible_facts.speech.next_id}}"
+      log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
 
   - name: Update inspection report
     set_fact:
-      inspection_report: "{{ inspection_report | merge_dicts(results) }}"
+      inspection_report: "{{inspection_report | merge_dicts(results)}}"
       results: {}
 
   - name: Detect system security
-    software.system_security:
-      id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-      log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+    software_system_security:
+      id_offset: "{{inspection_report.ansible_facts.speech.next_id}}"
+      log_path: "{{module_log_path}}/{{inventory_hostname | replace('.','_')}}_inspection.log"
     register: results
 
   - name: Update inspection report
     set_fact:
-      inspection_report: "{{ inspection_report | merge_dicts(results) }}"
+      inspection_report: "{{inspection_report | merge_dicts(results)}}"
       results: {}
 
 # Split Inspection report into separate objects
 - name: Separate action, data, speech facts
   set_fact:
-    recommended_actions: "{{ inspection_report.ansible_facts.actions }}"
-    system_data: "{{ inspection_report.ansible_facts.data }}"
-    speech: "{{ inspection_report.ansible_facts.speech }}"
+    recommended_actions: "{{inspection_report.ansible_facts.actions}}"
+    system_data: "{{inspection_report.ansible_facts.data}}"
+    speech: "{{inspection_report.ansible_facts.speech}}"
 
 - name: Display Recommended Actions
   debug:
@@ -153,7 +153,7 @@
 
 - name: Extract 'text' values from speech data
   set_fact:
-    speech_texts: "{{ speech | extract_key('text') }}"
+    speech_texts: "{{speech | extract_key('text')}}"
 
 - name: Display speech texts
   debug:
