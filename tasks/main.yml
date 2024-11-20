@@ -2,7 +2,7 @@
 - name: Set safe inventory hostname
   ansible.builtin.set_fact:
     safe_inventory_hostname: "{{ inventory_hostname | replace('.', '_') }}"
-
+    
 - name: Gather Hardware Information
   block:
     - name: Assess system information
