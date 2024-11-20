@@ -1,10 +1,14 @@
 ---
+- name: Set safe inventory hostname
+  ansible.builtin.set_fact:
+    safe_inventory_hostname: "{{ inventory_hostname | replace('.', '_') }}"
+
 - name: Gather Hardware Information
   block:
     - name: Assess system information
       hardware_global_info:
         id_offset: 1
-        log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+        log_path: "{{ module_log_path }}/{{ safe_inventory_hostname }}_inspection.log"
       register: results
 
     - name: Update inspection report
@@ -15,7 +19,7 @@
     - name: Detect AMD GPU
       hardware_gpu_amd:
         id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-        log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+        log_path: "{{ module_log_path }}/{{ safe_inventory_hostname }}_inspection.log"
       register: results
 
     - name: Update inspection report
@@ -26,7 +30,7 @@
     - name: Detect Intel GPU
       hardware_gpu_intel:
         id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-        log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+        log_path: "{{ module_log_path }}/{{ safe_inventory_hostname }}_inspection.log"
       register: results
 
     - name: Update inspection report
@@ -37,7 +41,7 @@
     - name: Detect Nvidia GPU
       hardware_gpu_nvidia:
         id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-        log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+        log_path: "{{ module_log_path }}/{{ safe_inventory_hostname }}_inspection.log"
       register: results
 
     - name: Update inspection report
@@ -48,7 +52,7 @@
     - name: Detect Nvidia toolkits
       hardware_gpu_toolkit_nvidia:
         id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-        log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+        log_path: "{{ module_log_path }}/{{ safe_inventory_hostname }}_inspection.log"
       register: results
 
     - name: Update inspection report
@@ -59,7 +63,7 @@
     - name: Detect Google Coral
       hardware_tpu_coral:
         id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-        log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+        log_path: "{{ module_log_path }}/{{ safe_inventory_hostname }}_inspection.log"
       register: results
 
     - name: Update inspection report
@@ -74,7 +78,7 @@
       software_apps:
         apps: "{{ apps_to_check }}"
         id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-        log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+        log_path: "{{ module_log_path }}/{{ safe_inventory_hostname }}_inspection.log"
       register: results
 
     - name: Update inspection report
@@ -85,7 +89,7 @@
     - name: Detect docker
       software_docker:
         id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-        log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+        log_path: "{{ module_log_path }}/{{ safe_inventory_hostname }}_inspection.log"
       register: results
 
     - name: Update inspection report
@@ -96,7 +100,7 @@
     - name: Detect internet
       software_internet:
         id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-        log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+        log_path: "{{ module_log_path }}/{{ safe_inventory_hostname }}_inspection.log"
       register: results
 
     - name: Update inspection report
@@ -109,7 +113,7 @@
         apis: "{{ apis_to_test }}"
         timeout: "{{ api_test_timeout }}"
         id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-        log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+        log_path: "{{ module_log_path }}/{{ safe_inventory_hostname }}_inspection.log"
       register: results
 
     - name: Update inspection report
@@ -120,7 +124,7 @@
     - name: Detect system security
       software_system_security:
         id_offset: "{{ inspection_report.ansible_facts.speech.next_id }}"
-        log_path: "{{ module_log_path }}/{{ inventory_hostname | replace('.','_') }}_inspection.log"
+        log_path: "{{ module_log_path }}/{{ safe_inventory_hostname }}_inspection.log"
       register: results
 
     - name: Update inspection report
