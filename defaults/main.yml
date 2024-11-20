@@ -1,5 +1,5 @@
 ---
-# defaults file for docker_ai_assistant
+# defaults file for host_inspector
 
 module_library_path: "{{ playbook_dir }}/.test"
 module_tasks_path: "{{ playbook_dir }}/.test"
