@@ -1,0 +1,13 @@
+services:
+  host_inspector:
+    image: host_inspector  # Assuming you've built or pulled this image
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro
+      - ~/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro
+    #   - ../../inventory/all:/ansible/inventory
+    # environment:
+    #   - INVENTORY=/ansible/inventory/all
+    network_mode: "host"

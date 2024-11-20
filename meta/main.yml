@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Mister Robot
-  namespace: brain-x
+  namespace: brainxio
   role_name: host_inspector
   description: >-
     The **Host Inspector** role assesses host systems comprehensively by:
