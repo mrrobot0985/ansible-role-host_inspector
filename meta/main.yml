@@ -3,17 +3,7 @@ galaxy_info:
   author: Mister Robot
   namespace: brainxio
   role_name: host_inspector
-  description: >-
-    The **Host Inspector** role assesses host systems comprehensively by:
-    - **Installed Applications**: Checking CLI tools for presence & version.
-    - **System Information**: Gathering details like OS info, CPU, memory, disk.
-    - **Network**: Evaluating connectivity and settings.
-    - **Security**: Reviewing firewall, SSH config, and patches.
-    - **Docker/GPU**: Inspecting Docker setups and NVIDIA GPU status.
-    - **API**: Verifying critical services' operational status.
-
-    This role outputs structured data for system health analysis, aiding in
-    admin tasks like auditing, troubleshooting, and maintenance.
+  description: Comprehensive host system assessment, checking apps, system info, network, security, Docker, GPU, and APIs.
 
   company: BrainXio
 

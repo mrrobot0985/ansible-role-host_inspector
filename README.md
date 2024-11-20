@@ -10,7 +10,6 @@ Requirements
 
 - **Ansible**: Version 2.1 or higher.
 - **Python**: Required on the target hosts for executing Python scripts.
-- **Requests Library**: Necessary for API checks; install with `pip install requests`.
 - **Docker**: Required for Docker-related checks.
 - **nvidia-smi**: Necessary for NVIDIA GPU status checks.
 - **nmap**: Essential for network scanning tasks.
@@ -22,6 +21,7 @@ Role Variables
 **defaults/main.yml:**
 
 - **apps_to_check**: List of applications to check for installation and version:
+
   ```yaml
   apps_to_check:
     - curl
@@ -40,7 +40,7 @@ Role Variables
 - **scan_ports**: Ports to be scanned by nmap (default: `'22,80,443'`).
 
 - **apis_to_test**: List of APIs to test:
-  ```yaml
+```yaml
   apis_to_test:
     - name: "ollama"
       url: "http://127.0.0.1"
@@ -73,6 +73,7 @@ Usage example:
 - hosts: all
   roles:
     - role: host_inspector
+
       vars:
         debug: true
         apps_to_check:
@@ -84,11 +85,6 @@ Usage example:
           - name: "grafana"
             port: 3001
             endpoint: "/api/health"
-  tasks:
-    - name: Display host inspection results
-      debug:
-        var: inspector_info
-      when: debug is defined and debug
 ```
 
 License

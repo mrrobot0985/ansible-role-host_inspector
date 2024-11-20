@@ -159,3 +159,4 @@
   debug:
     var: speech_texts
   when: show_speech_texts | default(false) | bool
+
